@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>
+        Crop Recommendation System
+    </title>
+
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+
+        body {
+
+            margin: 0;
+
+            font-family:
+                Arial,
+                sans-serif;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #e8f5e9,
+                    #f1f8e9
+                );
+
+            min-height: 100vh;
+
+        }
+
+
+        .header {
+
+            background: #2e7d32;
+
+            color: white;
+
+            text-align: center;
+
+            padding: 25px;
+
+        }
+
+
+        .header h1 {
+
+            margin: 0;
+
+            font-size: 32px;
+
+        }
+
+
+        .header p {
+
+            margin-top: 8px;
+
+            font-size: 16px;
+
+        }
+
+
+        .container {
+
+            width: 600px;
+
+            max-width: 95%;
+
+            margin: 35px auto;
+
+            background: white;
+
+            padding: 30px;
+
+            border-radius: 15px;
+
+            box-shadow:
+                0 8px 25px
+                rgba(0,0,0,0.12);
+
+        }
+
+
+        .section-title {
+
+            color: #2e7d32;
+
+            border-bottom:
+                2px solid #e8f5e9;
+
+            padding-bottom: 10px;
+
+        }
+
+
+        label {
+
+            display: block;
+
+            margin-top: 16px;
+
+            font-weight: bold;
+
+            color: #333;
+
+        }
+
+
+        input {
+
+            width: 100%;
+
+            padding: 12px;
+
+            margin-top: 6px;
+
+            border:
+                1px solid #ccc;
+
+            border-radius: 7px;
+
+            font-size: 15px;
+
+        }
+
+
+        input:focus {
+
+            outline: none;
+
+            border-color: #2e7d32;
+
+        }
+
+
+        button {
+
+            width: 100%;
+
+            margin-top: 25px;
+
+            padding: 14px;
+
+            background: #2e7d32;
+
+            color: white;
+
+            border: none;
+
+            border-radius: 8px;
+
+            font-size: 17px;
+
+            font-weight: bold;
+
+            cursor: pointer;
+
+        }
+
+
+        button:hover {
+
+            background: #1b5e20;
+
+        }
+
+
+        .result {
+
+            margin-top: 30px;
+
+            padding: 22px;
+
+            background: #f1f8e9;
+
+            border-radius: 10px;
+
+            border-left:
+                5px solid #2e7d32;
+
+        }
+
+
+        .result h2 {
+
+            color: #1b5e20;
+
+            margin-top: 0;
+
+        }
+
+
+        .prediction {
+
+            background: white;
+
+            padding: 15px;
+
+            margin-top: 12px;
+
+            border-radius: 8px;
+
+        }
+
+
+        .crop {
+
+            color: #2e7d32;
+
+            font-size: 21px;
+
+            font-weight: bold;
+
+        }
+
+
+        .confidence {
+
+            color: #1565c0;
+
+            font-weight: bold;
+
+        }
+
+
+        .footer {
+
+            text-align: center;
+
+            color: #666;
+
+            padding: 20px;
+
+            font-size: 13px;
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<div class="header">
+
+    <h1>
+        🌱 Crop Recommendation System
+    </h1>
+
+    <p>
+        Machine Learning + Artificial Neural Network
+    </p>
+
+</div>
+
+
+<div class="container">
+
+
+    <h2 class="section-title">
+        Enter Agricultural Parameters
+    </h2>
+
+
+    <form method="POST">
+
+
+        <label>
+            Nitrogen (N)
+        </label>
+
+        <input
+            type="number"
+            step="any"
+            name="N"
+            placeholder="Example: 90"
+            required
+        >
+
+
+        <label>
+            Phosphorus (P)
+        </label>
+
+        <input
+            type="number"
+            step="any"
+            name="P"
+            placeholder="Example: 42"
+            required
+        >
+
+
+        <label>
+            Potassium (K)
+        </label>
+
+        <input
+            type="number"
+            step="any"
+            name="K"
+            placeholder="Example: 43"
+            required
+        >
+
+
+        <label>
+            Temperature (°C)
+        </label>
+
+        <input
+            type="number"
+            step="any"
+            name="temperature"
+            placeholder="Example: 25"
+            required
+        >
+
+
+        <label>
+            Humidity (%)
+        </label>
+
+        <input
+            type="number"
+            step="any"
+            name="humidity"
+            placeholder="Example: 80"
+            required
+        >
+
+
+        <label>
+            Soil pH
+        </label>
+
+        <input
+            type="number"
+            step="any"
+            name="ph"
+            placeholder="Example: 6.5"
+            required
+        >
+
+
+        <label>
+            Rainfall (mm)
+        </label>
+
+        <input
+            type="number"
+            step="any"
+            name="rainfall"
+            placeholder="Example: 200"
+            required
+        >
+
+
+        <button type="submit">
+
+            🔍 Recommend Crop
+
+        </button>
+
+
+    </form>
+
+
+    {% if rf_crop %}
+
+
+    <div class="result">
+
+        <h2>
+            🌾 Recommendation Result
+        </h2>
+
+
+        <div class="prediction">
+
+            <strong>
+                Random Forest
+            </strong>
+
+            <br><br>
+
+            Recommended Crop:
+
+            <span class="crop">
+
+                {{ rf_crop }}
+
+            </span>
+
+        </div>
+
+
+        <div class="prediction">
+
+            <strong>
+                Artificial Neural Network
+            </strong>
+
+            <br><br>
+
+            Recommended Crop:
+
+            <span class="crop">
+
+                {{ ann_crop }}
+
+            </span>
+
+            <br><br>
+
+            ANN Confidence:
+
+            <span class="confidence">
+
+                {{ confidence }}%
+
+            </span>
+
+        </div>
+
+
+    </div>
+
+
+    {% endif %}
+
+
+</div>
+
+
+<div class="footer">
+
+    Crop Recommendation System |
+
+    Machine Learning Classification Project
+
+</div>
+
+
+</body>
+
+</html>
